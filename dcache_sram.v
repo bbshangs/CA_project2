@@ -45,8 +45,9 @@ always@(posedge clk_i or posedge rst_i) begin
             end
         end
     end
-    if (enable_i && write_i) begin
+    if (enable_i && write_i) begin //cache_req && (cache_write | write_hit)
         // TODO: Handle your write of 2-way associative cache + LRU here
+        
     end
 end
 
