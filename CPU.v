@@ -15,6 +15,12 @@ module CPU
 input               clk_i;
 input               rst_i;
 input               start_i;
+input   [255:0]     mem_data_i;
+input               mem_ack_i;
+input   [255:0]     mem_data_o;
+input   [31:0]      mem_addr_o;
+input               mem_enable_o;
+input               mem_write_o;
 
 Control Control(
     .Op_i       (IFID.instr_o[6:0]),
@@ -133,14 +139,14 @@ Data_Memory Data_Memory(
 );
 */
 
-dcache_controller dcache_controller(
+dcache_controller dcache(
     // System clock, reset and stall
     .clk_i          (clk_i),
     .rst_i          (rst_i),
 
     // to Data Memory interface
-    .mem_data_i     (Data_Memory.data_o),
-    .mem_ack_i      (Data_Memory.ack_o),
+    .mem_data_i     (mem_data_i),
+    .mem_ack_i      (mem_ack_i),
     .mem_data_o     (),
     .mem_addr_o     (),
     .mem_enable_o   (),
@@ -184,7 +190,7 @@ IFID IFID(
     .Flush_i    (If_Branch.data_o),
     .PC_i       (PC.pc_o),
     .instr_i    (Instruction_Memory.instr_o),
-    .MemStall_i (dcache_controller.cpu_stall_o),
+    .MemStall_i (dcache.cpu_stall_o),
     .PC_o       (),
     .instr_o    ()
 );
@@ -206,7 +212,7 @@ IDEX IDEX(
     .RS1addr_i  (IFID.instr_o[19:15]),
     .RS2addr_i  (IFID.instr_o[24:20]),
     .RDaddr_i   (IFID.instr_o[11:7]),
-    .MemStall_i (dcache_controller.cpu_stall_o),
+    .MemStall_i (dcache.cpu_stall_o),
     // Control Output
     .ALUOp_o    (),
     .ALUSrc_o   (),
@@ -233,7 +239,7 @@ EXMEM EXMEM(
     .ALUResult_i    (ALU.data_o),
     .MUX_B_i        (MUX_B.data_o),
     .RDaddr_i       (IDEX.RDaddr_o),
-    .MemStall_i     (dcache_controller.cpu_stall_o),
+    .MemStall_i     (dcache.cpu_stall_o),
     .RegWrite_o     (),
     .MemtoReg_o     (),
     .MemRead_o      (),
@@ -248,9 +254,9 @@ MEMWB MEMWB(
     .RegWrite_i     (EXMEM.RegWrite_o),
     .MemtoReg_i     (EXMEM.MemtoReg_o),
     .ALUResult_i    (EXMEM.ALUResult_o),
-    .ReadData_i     (Data_Memory.data_o),
+    .ReadData_i     (dcache.cpu_data_o),
     .RDaddr_i       (EXMEM.RDaddr_o),
-    .MemStall_i     (dcache_controller.cpu_stall_o),
+    .MemStall_i     (dcache.cpu_stall_o),
     .RegWrite_o     (),
     .MemtoReg_o     (),
     .ALUResult_o    (),
