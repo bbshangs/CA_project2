@@ -118,11 +118,37 @@ ALU_Control ALU_Control(
 
 Data_Memory Data_Memory(
     .clk_i      (clk_i),
-    .addr_i     (EXMEM.ALUResult_o),
-    .MemRead_i  (EXMEM.MemRead_o),
-    .MemWrite_i (EXMEM.MemWrite_o),
-    .data_i     (EXMEM.MUX_B_o),
+    .rst_i      (rst_i),
+    .addr_i     (dcache_controller.mem_addr_o),
+    .enable_i   (dcache_controller.mem_enable_o),
+    .write_i    (dcache_controller.mem_write_o),
+    .data_i     (dcache_controller.mem_data_o),
+    .ack_o      (),
     .data_o     ()
+);
+
+dcache_controller dcache_controller(
+    // System clock, reset and stall
+    .clk_i          (clk_i),
+    .rst_i          (rst_i),
+    
+    // to Data Memory interface        
+    .mem_data_i     (Data_Memory.data_o), 
+    .mem_ack_i      (Data_Memory.ack_o),     
+    .mem_data_o     (), 
+    .mem_addr_o     (),     
+    .mem_enable_o   (), 
+    .mem_write_o    (), 
+    
+    // to CPU interface    
+    .cpu_data_i     (EXMEM.MUX_B_o), 
+    .cpu_addr_i     (EXMEM.ALUResult_o),     
+    .cpu_MemRead_i  (EXMEM.MemRead_o), 
+    .cpu_MemWrite_i (EXMEM.MemWrite_o), 
+
+    .cpu_data_o     (), 
+    .cpu_stall_o    ()
+
 );
 
 Hazard_Detection Hazard_Detection(
@@ -152,6 +178,7 @@ IFID IFID(
     .Flush_i    (If_Branch.data_o),
     .PC_i       (PC.pc_o),
     .instr_i    (Instruction_Memory.instr_o),
+    .MemStall_i (dcache_controller.cpu_stall_o),
     .PC_o       (),
     .instr_o    ()
 );
@@ -173,6 +200,7 @@ IDEX IDEX(
     .RS1addr_i  (IFID.instr_o[19:15]),
     .RS2addr_i  (IFID.instr_o[24:20]),
     .RDaddr_i   (IFID.instr_o[11:7]),
+    .MemStall_i (dcache_controller.cpu_stall_o),
     // Control Output
     .ALUOp_o    (),
     .ALUSrc_o   (),
@@ -199,6 +227,7 @@ EXMEM EXMEM(
     .ALUResult_i    (ALU.data_o),
     .MUX_B_i        (MUX_B.data_o),
     .RDaddr_i       (IDEX.RDaddr_o),
+    .MemStall_i     (dcache_controller.cpu_stall_o),
     .RegWrite_o     (),
     .MemtoReg_o     (),
     .MemRead_o      (),
@@ -215,6 +244,7 @@ MEMWB MEMWB(
     .ALUResult_i    (EXMEM.ALUResult_o),
     .ReadData_i     (Data_Memory.data_o),
     .RDaddr_i       (EXMEM.RDaddr_o),
+    .MemStall_i     (dcache_controller.cpu_stall_o),
     .RegWrite_o     (),
     .MemtoReg_o     (),
     .ALUResult_o    (),
