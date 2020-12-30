@@ -4,6 +4,7 @@ module IFID(
     Flush_i,
     PC_i,
     instr_i,
+    MemStall_i,
     PC_o,
     instr_o
 );
@@ -16,21 +17,23 @@ input	[31:0]	instr_i;
 output	[31:0]	PC_o;
 output	[31:0]	instr_o;
 
-reg		[31:0]	PC_o;
-reg 	[31:0]	instr_o;
+reg		[31:0]	PC_o = 32'b0;
+reg 	[31:0]	instr_o = 32'b0;
 
 always @(posedge clk_i) begin
-	if (Stall_i) begin
-		PC_o <= 32'b0;
-		instr_o <= instr_o;
-	end
-	else begin
-		PC_o <= PC_i;
-		if (Flush_i) begin
-			instr_o <= 32'b0;
+	if (~MemStall_i) begin
+		if (Stall_i) begin
+			PC_o <= 32'b0;
+			instr_o <= instr_o;
 		end
 		else begin
-			instr_o <= instr_i;
+			PC_o <= PC_i;
+			if (Flush_i) begin
+				instr_o <= 32'b0;
+			end
+			else begin
+				instr_o <= instr_i;
+			end
 		end
 	end
 end

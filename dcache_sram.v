@@ -37,6 +37,7 @@ integer            i, j;
 reg      [24:0]    tag_o;
 reg      [255:0]   data_o;
 reg                hit_o;
+reg                LRU[0:15][0:1];   
 
 
 
@@ -49,32 +50,52 @@ always@(posedge clk_i or posedge rst_i) begin
             for (j=0;j<2;j=j+1) begin
                 tag[i][j] <= 25'b0;
                 data[i][j] <= 256'b0;
+                LRU[i][j] <= 1'b0;
             end
         end
     end
     if (enable_i && write_i) begin //cache_req && (cache_write | write_hit)
         // TODO: Handle your write of 2-way associative cache + LRU here
-        
+        if (LRU[addr_i][0] == 0) begin
+            tag[addr_i][0] <= tag_i;
+            data[addr_i][0] <= data_i;
+            LRU[addr_i][0] <= 1'b1;
+            LRU[addr_i][1] <= 1'b0;
+        end
+        else begin
+            tag[addr_i][1] <= tag_i;
+            data[addr_i][1] <= data_i;
+            LRU[addr_i][1] <= 1'b1;
+            LRU[addr_i][0] <= 1'b0;
+        end
     end
 end
 
 // Read Data      
 // TODO: tag_o=? data_o=? hit_o=?
-if (tag_i == tag[addr_i][0]) begin
-    data_o = data[addr_i][0];
-    tag_o = tag[addr_i][0];
-    hit_o = 1'b1;
-end
-else if (tag_i == tag[addr_i][1]) begin
-    data_o = data[addr_i][1];
-    tag_o = tag[addr_i][1];
-    hit_o = 1'b1;
+if (enable_i) begin
+    if (tag_i == tag[addr_i][0]) begin
+        data_o <= data[addr_i][0];
+        tag_o <= tag[addr_i][0];
+        hit_o <= 1'b1;
+    end
+    else if (tag_i == tag[addr_i][1]) begin
+        data_o <= data[addr_i][1];
+        tag_o <= tag[addr_i][1];
+        hit_o <= 1'b1;
+    end
+    else begin
+        data_o <= data_i;
+        tag_o <= tag_i;
+        hit_o <= 1'b0;
+    end
 end
 else begin
-    data_o = data_i;
-    tag_o = tag_i;
-    hit_o = 1'b0;
+    data_o <= 256'b0;
+    tag_o <= 25'b0;
+    hit_o <= 1'b0;
 end
+
 
 endmodule
 
