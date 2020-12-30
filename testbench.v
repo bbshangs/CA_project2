@@ -70,7 +70,7 @@ initial begin
         for(i=0; i<16; i=i+1) begin
             CPU.dcache.dcache_sram.tag[i][j] = 25'b0;
             CPU.dcache.dcache_sram.data[i][j] = 256'b0;
-            CPU.dcache.dcache_sram.LRU[i][j] = 1'b0;
+            CPU.dcache.dcache_sram.LRU[i][j] = 1'b1;
         end
     end
     // [D-CacheInitialization] DO NOT REMOVE THIS FLAG !!!
@@ -185,15 +185,16 @@ always@(posedge Clk) begin
     // debug //
     /*
     $fdisplay(outfile, "pc_stall_o: %b", CPU.dcache.cpu_stall_o);
-    $fdisplay(outfile, "tag: %b", CPU.dcache.dcache_sram.tag_i);
-    $fdisplay(outfile, "index: %b", CPU.dcache.dcache_sram.addr_i);
-    $fdisplay(outfile, "hit: %b", CPU.dcache.dcache_sram.hit_o);
+    $fdisplay(outfile, "tag_i: %b", CPU.dcache.dcache_sram.tag_i);
+    $fdisplay(outfile, "index: %d", CPU.dcache.dcache_sram.addr_i);
     $fdisplay(outfile, "tag_o: %b", CPU.dcache.dcache_sram.tag_o);
-    $fdisplay(outfile, "data_o: %h", CPU.dcache.dcache_sram.data_o);
-    $fdisplay(outfile, "offset: %b", CPU.dcache.cpu_addr_i[4:0]);
+    $fdisplay(outfile, "data_i: %h", CPU.dcache.dcache_sram.data_i);
+    $fdisplay(outfile, "hit: %b", CPU.dcache.dcache_sram.hit_o);
+    //$fdisplay(outfile, "offset: %b", CPU.dcache.cpu_addr_i[4:0]);
     $fdisplay(outfile, "write_i: %h", CPU.dcache.dcache_sram.write_i);
     $fdisplay(outfile, "enable_i: %h", CPU.dcache.dcache_sram.enable_i);
-    */
+    $fdisplay(outfile, "data[addr][0]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][0]);
+    $fdisplay(outfile, "data[addr][1]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][1]);*/
 
 
     $fdisplay(outfile, "\n");

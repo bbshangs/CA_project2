@@ -1,6 +1,5 @@
 Cycle:          18, Write Miss, Address: 00000000, Write Data: 77665544
-Cycle:          31, Write Miss, Address: 00000000, Write Data: 77665544
-Cycle:          43, Write Miss, Address: 00000020, Write Data: 8899aabb
+Cycle:          32, Write Miss, Address: 00000020, Write Data: 8899aabb
 Cycle:          46, Write Hit , Address: 00000004, Write Data: 8899aabb
 Cycle:          47, Write Hit , Address: 00000024, Write Data: 77665544
 Cycle:          48, Write Hit , Address: 00000008, Write Data: 77665544
