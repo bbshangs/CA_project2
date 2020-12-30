@@ -1,10 +1,14 @@
-`include "define.v"
-
 module CPU
 (
     clk_i,
     rst_i,
-    start_i
+    start_i,
+    mem_data_i,
+    mem_ack_i,
+    mem_data_o,
+    mem_addr_o,
+    mem_enable_o,
+    mem_write_o
 );
 
 // Ports
@@ -116,6 +120,7 @@ ALU_Control ALU_Control(
     .ALUCtrl_o  ()
 );
 
+/*
 Data_Memory Data_Memory(
     .clk_i      (clk_i),
     .rst_i      (rst_i),
@@ -126,27 +131,28 @@ Data_Memory Data_Memory(
     .ack_o      (),
     .data_o     ()
 );
+*/
 
 dcache_controller dcache_controller(
     // System clock, reset and stall
     .clk_i          (clk_i),
     .rst_i          (rst_i),
-    
-    // to Data Memory interface        
-    .mem_data_i     (Data_Memory.data_o), 
-    .mem_ack_i      (Data_Memory.ack_o),     
-    .mem_data_o     (), 
-    .mem_addr_o     (),     
-    .mem_enable_o   (), 
-    .mem_write_o    (), 
-    
-    // to CPU interface    
-    .cpu_data_i     (EXMEM.MUX_B_o), 
-    .cpu_addr_i     (EXMEM.ALUResult_o),     
-    .cpu_MemRead_i  (EXMEM.MemRead_o), 
-    .cpu_MemWrite_i (EXMEM.MemWrite_o), 
 
-    .cpu_data_o     (), 
+    // to Data Memory interface
+    .mem_data_i     (Data_Memory.data_o),
+    .mem_ack_i      (Data_Memory.ack_o),
+    .mem_data_o     (),
+    .mem_addr_o     (),
+    .mem_enable_o   (),
+    .mem_write_o    (),
+
+    // to CPU interface
+    .cpu_data_i     (EXMEM.MUX_B_o),
+    .cpu_addr_i     (EXMEM.ALUResult_o),
+    .cpu_MemRead_i  (EXMEM.MemRead_o),
+    .cpu_MemWrite_i (EXMEM.MemWrite_o),
+
+    .cpu_data_o     (),
     .cpu_stall_o    ()
 
 );

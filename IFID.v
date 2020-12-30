@@ -14,6 +14,8 @@ input			Stall_i;
 input			Flush_i;
 input	[31:0]	PC_i;
 input	[31:0]	instr_i;
+input 			MemStall_i;
+
 output	[31:0]	PC_o;
 output	[31:0]	instr_o;
 

@@ -1,5 +1,3 @@
-`include "define.v"
-
 module ALU(
     data1_i,
     data2_i,

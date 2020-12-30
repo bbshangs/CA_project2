@@ -1,5 +1,3 @@
-`include "define.v"
-
 module ALU_Control(
     funct_i,
     ALUOp_i,

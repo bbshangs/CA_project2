@@ -24,6 +24,7 @@ input 						clk_i;
 input						RegWrite_i, MemtoReg_i, MemRead_i, MemWrite_i;
 input signed	[31:0]		ALUResult_i, MUX_B_i;
 input			[4:0]		RDaddr_i;
+input 						MemStall_i;
 
 output						RegWrite_o, MemtoReg_o, MemRead_o, MemWrite_o;
 output signed	[31:0]		ALUResult_o, MUX_B_o;
@@ -43,7 +44,7 @@ always @(posedge clk_i) begin
         MUX_B_o <= MUX_B_i;
         RDaddr_o <= RDaddr_i;
     end
-	
+
 end
 
 endmodule

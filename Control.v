@@ -1,5 +1,3 @@
-`include "define.v"
-
 module Control(
 	Op_i,
 	NoOp_i,

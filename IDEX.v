@@ -36,6 +36,7 @@ input 						ALUSrc_i, RegWrite_i, MemtoReg_i,MemRead_i, MemWrite_i;
 input signed	[31:0]		data1_i, data2_i, imm_i;
 input			[9:0]		funct_i;
 input			[4:0]		RS1addr_i, RS2addr_i, RDaddr_i;
+input 						MemStall_i;
 
 output          [1:0]       ALUOp_o;
 output                      ALUSrc_o, RegWrite_o, MemtoReg_o, MemRead_o, MemWrite_o;
