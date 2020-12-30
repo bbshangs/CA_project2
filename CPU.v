@@ -50,6 +50,7 @@ PC PC(
     .clk_i      (clk_i),
     .rst_i      (rst_i),
     .start_i    (start_i),
+    .stall_i    (dcache.cpu_stall_o),
     .PCWrite_i  (Hazard_Detection.PCWrite_o),
     .pc_i       (MUX_PCSource.data_o),
     .pc_o       ()
