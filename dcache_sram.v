@@ -56,24 +56,26 @@ always@(posedge clk_i or posedge rst_i) begin
     end
     if (enable_i && write_i) begin //cache_req && (cache_write | write_hit)
         // TODO: Handle your write of 2-way associative cache + LRU here
-        if (LRU[addr_i][0] == 0) begin
+        if (LRU[addr_i][0] == 1'b0) begin
             tag[addr_i][0] <= tag_i;
             data[addr_i][0] <= data_i;
             LRU[addr_i][0] <= 1'b1;
             LRU[addr_i][1] <= 1'b0;
+            hit_o <= 1'b1;
         end
         else begin
             tag[addr_i][1] <= tag_i;
             data[addr_i][1] <= data_i;
             LRU[addr_i][1] <= 1'b1;
             LRU[addr_i][0] <= 1'b0;
+            hit_o <= 1'b1;
         end
     end
 end
 
 // Read Data
 // TODO: tag_o=? data_o=? hit_o=?
-always @(*) begin
+always @(posedge clk_i or posedge rst_i) begin
     if (enable_i) begin
         if (tag_i == tag[addr_i][0] && tag[addr_i][0][24] == 1'b1) begin
             data_o <= data[addr_i][0];
