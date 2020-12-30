@@ -181,6 +181,10 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "Data Memory: 0x0420 = %h", Data_Memory.memory[33]);
     $fdisplay(outfile, "Data Memory: 0x0440 = %h", Data_Memory.memory[34]);
 
+    // debug //
+    //$fdisplay(outfile, "pc_stall_o: %b", CPU.dcache.cpu_stall_o);
+
+
     $fdisplay(outfile, "\n");
 
     // print Data Cache Status

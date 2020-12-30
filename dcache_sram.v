@@ -75,12 +75,12 @@ end
 // TODO: tag_o=? data_o=? hit_o=?
 always @(*) begin
     if (enable_i) begin
-        if (tag_i == tag[addr_i][0]) begin
+        if (tag_i == tag[addr_i][0] && tag[addr_i][0][24] == 1'b1) begin
             data_o <= data[addr_i][0];
             tag_o <= tag[addr_i][0];
             hit_o <= 1'b1;
         end
-        else if (tag_i == tag[addr_i][1]) begin
+        else if (tag_i == tag[addr_i][1] && tag[addr_i][1][24] == 1'b1) begin
             data_o <= data[addr_i][1];
             tag_o <= tag[addr_i][1];
             hit_o <= 1'b1;

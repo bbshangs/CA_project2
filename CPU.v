@@ -17,10 +17,11 @@ input               rst_i;
 input               start_i;
 input   [255:0]     mem_data_i;
 input               mem_ack_i;
-input   [255:0]     mem_data_o;
-input   [31:0]      mem_addr_o;
-input               mem_enable_o;
-input               mem_write_o;
+output   [255:0]    mem_data_o;
+output   [31:0]     mem_addr_o;
+output              mem_enable_o;
+output              mem_write_o;
+
 
 Control Control(
     .Op_i       (IFID.instr_o[6:0]),
@@ -148,10 +149,10 @@ dcache_controller dcache(
     // to Data Memory interface
     .mem_data_i     (mem_data_i),
     .mem_ack_i      (mem_ack_i),
-    .mem_data_o     (),
-    .mem_addr_o     (),
-    .mem_enable_o   (),
-    .mem_write_o    (),
+    .mem_data_o     (mem_data_o),
+    .mem_addr_o     (mem_addr_o),
+    .mem_enable_o   (mem_enable_o),
+    .mem_write_o    (mem_write_o),
 
     // to CPU interface
     .cpu_data_i     (EXMEM.MUX_B_o),
