@@ -57,12 +57,14 @@ always@(posedge clk_i or posedge rst_i) begin
         if (hit0) begin
             data[addr_i][0] <= data_i;
             tag[addr_i][0] <= tag_i;
+            tag[addr_i][0][23] <= 1'b1;
             LRU[addr_i][0] <= 1'b0;
             LRU[addr_i][1] <= 1'b1;
         end
         else if (hit1) begin
             data[addr_i][1] <= data_i;
             tag[addr_i][1] <= tag_i;
+            tag[addr_i][1][23] <= 1'b1;
             LRU[addr_i][0] <= 1'b1;
             LRU[addr_i][1] <= 1'b0;
         end
@@ -70,12 +72,14 @@ always@(posedge clk_i or posedge rst_i) begin
             if (LRU[addr_i][0]) begin
                 data[addr_i][0] <= data_i;
                 tag[addr_i][0] <= tag_i;
+                tag[addr_i][0][23] <= 1'b1;
                 LRU[addr_i][0] <= 1'b0;
                 LRU[addr_i][1] <= 1'b1;
             end
             else begin
                 data[addr_i][1] <= data_i;
                 tag[addr_i][1] <= tag_i;
+                tag[addr_i][1][23] <= 1'b1;
                 LRU[addr_i][0] <= 1'b1;
                 LRU[addr_i][1] <= 1'b0;
             end
@@ -87,40 +91,16 @@ end
 // TODO: tag_o=? data_o=? hit_o=?
 assign hit0 = (tag_i[22:0] == tag[addr_i][0][22:0]) && (tag[addr_i][0][24] == 1'b1);
 assign hit1 = (tag_i[22:0] == tag[addr_i][1][22:0]) && (tag[addr_i][1][24] == 1'b1);
-assign hit_o = hit0 || hit1;
+assign hit_o = hit0 | hit1;
 
 assign data_o = (hit0) ? data[addr_i][0] :
                 (hit1) ? data[addr_i][1] :
-                256'b0;
+                (LRU[addr_i][0] == 1'b1) ? data[addr_i][0] :
+                data[addr_i][1];
 assign tag_o = (hit0) ? tag[addr_i][0] :
                 (hit1) ? tag[addr_i][1] :
-                25'b0;
+                (LRU[addr_i][0] == 1'b1) ? tag[addr_i][0] :
+                tag[addr_i][1];
 
-/*
-always @(posedge clk_i or posedge rst_i) begin
-    if (enable_i) begin
-        if (tag_i == tag[addr_i][0] && tag[addr_i][0][24] == 1'b1) begin
-            data_o <= data[addr_i][0];
-            tag_o <= tag[addr_i][0];
-            hit_o <= 1'b1;
-        end
-        else if (tag_i == tag[addr_i][1] && tag[addr_i][1][24] == 1'b1) begin
-            data_o <= data[addr_i][1];
-            tag_o <= tag[addr_i][1];
-            hit_o <= 1'b1;
-        end
-        else begin
-            data_o <= data_i;
-            tag_o <= tag_i;
-            hit_o <= 1'b0;
-        end
-    end
-    else begin
-        data_o <= 256'b0;
-        tag_o <= 25'b0;
-        hit_o <= 1'b0;
-    end
-end
-*/
 
 endmodule

@@ -115,7 +115,7 @@ initial begin
 
     // Load instructions into instruction memory
     // Make sure you change back to "instruction.txt" before submission
-    $readmemb("testdata_public/instruction_1.txt", CPU.Instruction_Memory.memory);
+    $readmemb("testdata_public/instruction_3.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
@@ -195,6 +195,14 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "enable_i: %h", CPU.dcache.dcache_sram.enable_i);
     $fdisplay(outfile, "data[addr][0]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][0]);
     $fdisplay(outfile, "data[addr][1]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][1]);*/
+    $fdisplay(outfile, "dirty= %b", CPU.dcache.sram_dirty);
+    $fdisplay(outfile, "MemWrite= %b", CPU.dcache.cpu_MemWrite_i);
+    $fdisplay(outfile, "MemRead= %b", CPU.dcache.cpu_MemRead_i);
+    $fdisplay(outfile, "stall= %b", CPU.dcache.cpu_stall_o);
+    $fdisplay(outfile, "state= %b", CPU.dcache.state);
+    $fdisplay(outfile, "hit= %b", CPU.dcache.dcache_sram.hit_o);
+
+
 
 
     $fdisplay(outfile, "\n");
