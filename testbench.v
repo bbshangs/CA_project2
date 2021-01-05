@@ -115,7 +115,7 @@ initial begin
 
     // Load instructions into instruction memory
     // Make sure you change back to "instruction.txt" before submission
-    $readmemb("testdata_public/instruction_3.txt", CPU.Instruction_Memory.memory);
+    $readmemb("testdata_public/instruction_1.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
@@ -182,6 +182,32 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "Data Memory: 0x0420 = %h", Data_Memory.memory[33]);
     $fdisplay(outfile, "Data Memory: 0x0440 = %h", Data_Memory.memory[34]);
 
+<<<<<<< HEAD
+=======
+    // debug //
+    /*
+    $fdisplay(outfile, "pc_stall_o: %b", CPU.dcache.cpu_stall_o);
+    $fdisplay(outfile, "tag_i: %b", CPU.dcache.dcache_sram.tag_i);
+    $fdisplay(outfile, "index: %d", CPU.dcache.dcache_sram.addr_i);
+    $fdisplay(outfile, "tag_o: %b", CPU.dcache.dcache_sram.tag_o);
+    $fdisplay(outfile, "data_i: %h", CPU.dcache.dcache_sram.data_i);
+    $fdisplay(outfile, "hit: %b", CPU.dcache.dcache_sram.hit_o);
+    //$fdisplay(outfile, "offset: %b", CPU.dcache.cpu_addr_i[4:0]);
+    $fdisplay(outfile, "write_i: %h", CPU.dcache.dcache_sram.write_i);
+    $fdisplay(outfile, "enable_i: %h", CPU.dcache.dcache_sram.enable_i);
+    $fdisplay(outfile, "data[addr][0]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][0]);
+    $fdisplay(outfile, "data[addr][1]: %h", CPU.dcache.dcache_sram.data[CPU.dcache.dcache_sram.addr_i][1]);*/
+    // $fdisplay(outfile, "dirty= %b", CPU.dcache.sram_dirty);
+    // $fdisplay(outfile, "MemWrite= %b", CPU.dcache.cpu_MemWrite_i);
+    // $fdisplay(outfile, "MemRead= %b", CPU.dcache.cpu_MemRead_i);
+    // $fdisplay(outfile, "stall= %b", CPU.dcache.cpu_stall_o);
+    // $fdisplay(outfile, "state= %b", CPU.dcache.state);
+    // $fdisplay(outfile, "hit= %b", CPU.dcache.dcache_sram.hit_o);
+
+
+
+
+>>>>>>> 8e67795f0a29e4ae10114faeeeb10d5fe5c42359
     $fdisplay(outfile, "\n");
 
     // print Data Cache Status
