@@ -115,7 +115,7 @@ initial begin
 
     // Load instructions into instruction memory
     // Make sure you change back to "instruction.txt" before submission
-    $readmemb("testdata_public/instruction_1.txt", CPU.Instruction_Memory.memory);
+    $readmemb("testdata_public/instruction_3.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
@@ -182,8 +182,6 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "Data Memory: 0x0420 = %h", Data_Memory.memory[33]);
     $fdisplay(outfile, "Data Memory: 0x0440 = %h", Data_Memory.memory[34]);
 
-<<<<<<< HEAD
-=======
     // debug //
     /*
     $fdisplay(outfile, "pc_stall_o: %b", CPU.dcache.cpu_stall_o);
@@ -205,9 +203,6 @@ always@(posedge Clk) begin
     // $fdisplay(outfile, "hit= %b", CPU.dcache.dcache_sram.hit_o);
 
 
-
-
->>>>>>> 8e67795f0a29e4ae10114faeeeb10d5fe5c42359
     $fdisplay(outfile, "\n");
 
     // print Data Cache Status
