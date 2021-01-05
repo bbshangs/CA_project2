@@ -34,9 +34,9 @@ integer            i, j;
 
 
 // add
-wire     [24:0]    tag_o;
-wire     [255:0]   data_o;
-wire               hit_o, hit0, hit1;
+reg      [24:0]    tag_o;
+reg      [255:0]   data_o;
+reg                hit_o, hit0, hit1;
 reg                LRU[0:15][0:1];
 
 // Write Data
@@ -89,18 +89,32 @@ end
 
 // Read Data
 // TODO: tag_o=? data_o=? hit_o=?
-assign hit0 = (tag_i[22:0] == tag[addr_i][0][22:0]) && (tag[addr_i][0][24] == 1'b1);
-assign hit1 = (tag_i[22:0] == tag[addr_i][1][22:0]) && (tag[addr_i][1][24] == 1'b1);
-assign hit_o = hit0 | hit1;
+always @(*) begin
+    hit0 <= (tag_i[22:0] == tag[addr_i][0][22:0]) && (tag[addr_i][0][24] == 1'b1);
+    hit1 <= (tag_i[22:0] == tag[addr_i][1][22:0]) && (tag[addr_i][1][24] == 1'b1);
+    hit_o <= hit0 | hit1;
 
-assign data_o = (hit0) ? data[addr_i][0] :
-                (hit1) ? data[addr_i][1] :
-                (LRU[addr_i][0] == 1'b1) ? data[addr_i][0] :
-                data[addr_i][1];
-assign tag_o = (hit0) ? tag[addr_i][0] :
-                (hit1) ? tag[addr_i][1] :
-                (LRU[addr_i][0] == 1'b1) ? tag[addr_i][0] :
-                tag[addr_i][1];
+    if (hit0) begin
+        data_o <= data[addr_i][0];
+        tag_o <= tag[addr_i][0];
+        LRU[addr_i][0] <= 1'b0;
+        LRU[addr_i][1] <= 1'b1;
+    end
+    else if (hit1) begin
+        data_o <= data[addr_i][1];
+        tag_o <= tag[addr_i][1];
+        LRU[addr_i][0] <= 1'b1;
+        LRU[addr_i][1] <= 1'b0;
+    end
+    else if (LRU[addr_i][0] == 1'b1) begin
+        data_o <= data[addr_i][0];
+        tag_o <= tag[addr_i][0];
+    end
+    else if (LRU[addr_i][1] == 1'b1) begin
+        data_o <= data[addr_i][1];
+        tag_o <= tag[addr_i][1];
+    end
+end
 
 
 endmodule
